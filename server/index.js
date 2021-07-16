@@ -1,3 +1,16 @@
+const http = require("http");
+const path = require("path");
+const express = require("express");
+const socketIo = require("socket.io");
+const PORT = process.env.PORT || 3000;
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../", "client", "index.html"));
+});
+
 const needle = require("needle");
 const config = require("dotenv").config();
 const TOKEN = process.env.TWITTER_TOKEN;
@@ -50,7 +63,7 @@ const deleteRules = async (rules) => {
   return response.body;
 };
 
-const streamTweets = () => {
+const streamTweets = (socket) => {
   const stream = needle.get(streamURL, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
@@ -59,12 +72,12 @@ const streamTweets = () => {
   stream.on("data", (data) => {
     try {
       const json = JSON.parse(data);
-      console.log("HOLA", json);
+      socket.emit("tweet", json);
     } catch (error) {}
   });
 };
-
-(async () => {
+io.on("connection", async () => {
+  console.log("Client connected...");
   let currentRules;
   try {
     //get all stream rules
@@ -77,5 +90,9 @@ const streamTweets = () => {
     console.error(error);
     process.exit(1);
   }
-  streamTweets();
-})();
+  streamTweets(io);
+});
+
+server.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
+});
