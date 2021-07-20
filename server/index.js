@@ -6,20 +6,19 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+const needle = require("needle");
+const config = require("dotenv").config();
+const TOKEN = process.env.TWITTER_TOKEN;
 
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../", "client", "index.html"));
 });
 
-const needle = require("needle");
-const config = require("dotenv").config();
-const TOKEN = process.env.TWITTER_TOKEN;
-
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
   "https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
 
-const rules = [{ value: "12345" }];
+const rules = [{ value: "Brexit" }];
 
 //get stream rules
 const getRules = async () => {
@@ -38,7 +37,7 @@ const setRules = async () => {
   };
   const response = await needle("post", rulesURL, data, {
     headers: {
-      "Content-type": "application/json",
+      "content-type": "application/json",
       Authorization: `Bearer ${TOKEN}`,
     },
   });
@@ -56,7 +55,7 @@ const deleteRules = async (rules) => {
       ids: ids,
     },
   };
-  const response = await needle("delete", rulesURL, data, {
+  const response = await needle("post", rulesURL, data, {
     headers: {
       "content-type": "application/json",
       Authorization: `Bearer ${TOKEN}`,
@@ -77,6 +76,7 @@ const streamTweets = (socket) => {
       socket.emit("tweet", json);
     } catch (error) {}
   });
+  return stream;
 };
 io.on("connection", async () => {
   console.log("Client connected...");
