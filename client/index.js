@@ -1,8 +1,6 @@
 const tweetStream = document.getElementById("tweetStream");
 const socket = io();
-
 const tweets = [];
-
 socket.on("connect", () => {
   console.log("Connected to server...");
 });
@@ -14,7 +12,6 @@ socket.on("tweet", (tweet) => {
     text: tweet.data.text,
     username: `@${tweet.includes.users[0].username}`,
   };
-
   const tweetEl = document.createElement("div");
   tweetEl.className = "card my-4";
   tweetEl.innerHTML = `
@@ -29,4 +26,10 @@ socket.on("tweet", (tweet) => {
         `;
 
   tweetStream.appendChild(tweetEl);
+});
+
+document.getElementById("submit-hash").addEventListener("click", () => {
+  console.log("HELLO");
+  const inputHash = document.getElementById("insert-hash");
+  console.log(inputHash).innerText;
 });
