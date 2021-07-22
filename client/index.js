@@ -28,8 +28,14 @@ socket.on("tweet", (tweet) => {
   tweetStream.appendChild(tweetEl);
 });
 
-document.getElementById("submit-hash").addEventListener("click", () => {
-  console.log("HELLO");
-  const inputHash = document.getElementById("insert-hash");
-  console.log(inputHash).innerText;
-});
+const showInput = (event) => {
+  log.textContent = `KeyWord Searched "${event.target.value}"`;
+
+  event.preventDefault();
+};
+
+const input = document.getElementById("insert-hash");
+console.log(input.innerText);
+const log = document.getElementById("user-input");
+console.log(log);
+input.addEventListener("input", showInput);

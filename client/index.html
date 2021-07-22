@@ -16,11 +16,14 @@
   <body>
     <div class="navbar">
         <h1 class="navbar-brand">Real-Time Tweet Stream</h1>
-      <input class="insert-hash" >
-        <button class="button-hash" id="submit-hash">Insert Hash</button>
-      </input>
+      <form id="form">
+        <input class="insert-hash" id="insert-hash" >
+          <button type="submit" class="button-hash" id="submit-hash">Insert Hash</button>
+        </input>
+        <div id="user-input"></div>
+      </form>
     </div>
-
+    
     <div class="container">
       <div id="tweetStream"></div>
     </div>
