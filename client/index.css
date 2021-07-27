@@ -15,12 +15,14 @@ body {
 }
 .insert-hash {
   background-color: rgb(233, 232, 232);
+  content: "🔍";
   align-self: right;
   border-radius: 6px;
+  border: 1px solid #eaeaea;
 }
 .button-hash {
-  display: flex;
-  border: none;
+  border: 1px solid #eaeaea;
+
   border-radius: 5px;
   background-color: rgb(233, 232, 232);
   text-align: center;

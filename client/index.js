@@ -28,28 +28,33 @@ socket.on("tweet", (tweet) => {
   tweetStream.appendChild(tweetEl);
 });
 
-// const showInput = async (event) => {
-//   event.preventDefault();
-
+// const loadServer = async () => {
 //   try {
-//     const content = event.target.value;
-//     let keyWord = {
-//       value: content,
-//     };
-//   } catch (error) {
-//     console.log("Error");
-//     console.log(error);
+//     const res = await fetch("https://localhost:3000");
+//     hpCharacters = await res.json();
+//     displayCharacters(hpCharacters);
+//   } catch (err) {
+//     console.error(err);
 //   }
 // };
+// loadServer();
 
-// const input = document.getElementById("insert-hash");
-// const log = document.getElementById("user-input");
-// input.addEventListener("input", showInput);
-
-//second way???
 const form = document.getElementById("insert-hash");
-
-form.addEventListener("click", (event) => {
-  //event.preventDefault();
-  const inputWord = event.target.value;
+console.log(form);
+form.addEventListener("submit", (event) => {
+  console.log("hola");
+  event.target.value;
+  event.preventDefault();
 });
+
+// searchBar.addEventListener("keyup", (e) => {
+//   const searchString = e.target.value.toLowerCase();
+
+//   const filteredCharacters = hpCharacters.filter((character) => {
+//     return (
+//       character.name.toLowerCase().includes(searchString) ||
+//       character.house.toLowerCase().includes(searchString)
+//     );
+//   });
+//   displayCharacters(filteredCharacters);
+// });
