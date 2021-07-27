@@ -28,14 +28,28 @@ socket.on("tweet", (tweet) => {
   tweetStream.appendChild(tweetEl);
 });
 
-const showInput = (event) => {
-  log.textContent = `KeyWord Searched "${event.target.value}"`;
+// const showInput = async (event) => {
+//   event.preventDefault();
 
-  event.preventDefault();
-};
+//   try {
+//     const content = event.target.value;
+//     let keyWord = {
+//       value: content,
+//     };
+//   } catch (error) {
+//     console.log("Error");
+//     console.log(error);
+//   }
+// };
 
-const input = document.getElementById("insert-hash");
-console.log(input.innerText);
-const log = document.getElementById("user-input");
-console.log(log);
-input.addEventListener("input", showInput);
+// const input = document.getElementById("insert-hash");
+// const log = document.getElementById("user-input");
+// input.addEventListener("input", showInput);
+
+//second way???
+const form = document.getElementById("insert-hash");
+
+form.addEventListener("click", (event) => {
+  //event.preventDefault();
+  const inputWord = event.target.value;
+});
