@@ -9,20 +9,24 @@
       rel="stylesheet"
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
-    />  
+    />
     <title>Real-Time Tweet Stream</title>
   </head>
 
   <body>
     <div class="navbar">
-        <h1 class="navbar-brand">Real-Time Tweet Stream</h1>
-      <form id="form">
-        <input class="insert-hash" id="insert-hash" ></input>
-        <button type="submit" class="button-hash" id="submit-hash">Insert Hash</button>
-      
-      </form>
+      <h1 class="navbar-brand">Real-Time Tweet Stream</h1>
+      <div id="searchWrapper">
+        <input
+          type="text"
+          name="searchBar"
+          id="searchBar"
+          placeholder="search a keyword"
+        />
+      </div>
+      <div id="user-input"></div>
     </div>
-    <div id="user-input"></div>
+
     <div class="container">
       <div id="tweetStream"></div>
     </div>
@@ -33,6 +37,5 @@
     ></script>
 
     <script src="./index.js"></script>
-   
   </body>
 </html>
