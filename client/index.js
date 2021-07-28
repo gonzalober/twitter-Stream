@@ -7,20 +7,30 @@ socket.on("connect", () => {
 
 const searchBar = document.getElementById("searchBar");
 searchBar.addEventListener("keyup", (e) => {
+  e.preventDefault();
   const searchString = e.target.value.toLowerCase();
   console.log(searchString);
 
   const filteredCharacters = tweetData.filter((tweet) => {
-    console.log;
     return tweet.username.toLowerCase().includes(searchString);
   });
   console.log("hola--->", filteredCharacters);
   displayTweets(filteredCharacters);
 });
 
-const displayTweets = () => {
+const loadCharacters = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/");
+    hpCharacters = await res.text();
+
+    displayTweets(hpCharacters);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const displayTweets = (tweet) => {
   socket.on("tweet", (tweet) => {
-    // console.log(tweet)
     tweetData.push({
       id: tweet.data.id,
       text: tweet.data.text,
@@ -44,4 +54,18 @@ const displayTweets = () => {
   });
 };
 
-displayTweets();
+// const displayCharacters = (characters) => {
+//   const htmlString = characters
+//     .map((character) => {
+//       return `
+//           <li class="character">
+//               <h2>${character.name}</h2>
+//               <p>House: ${character.house}</p>
+//               <img src="${character.image}"></img>
+//           </li>
+//       `;
+//     })
+//     .join("");
+//   charactersList.innerHTML = htmlString;
+// };
+loadCharacters();
