@@ -5,6 +5,19 @@ socket.on("connect", () => {
   console.log("Connected to server...");
 });
 
+const searchBar = document.getElementById("searchBar");
+searchBar.addEventListener("keyup", (e) => {
+  const searchString = e.target.value.toLowerCase();
+  console.log(searchString);
+
+  const filteredCharacters = tweetData.filter((tweet) => {
+    console.log;
+    return tweet.username.toLowerCase().includes(searchString);
+  });
+  console.log("hola--->", filteredCharacters);
+  displayTweets(filteredCharacters);
+});
+
 const displayTweets = () => {
   socket.on("tweet", (tweet) => {
     // console.log(tweet)
@@ -30,18 +43,5 @@ const displayTweets = () => {
     tweetStream.appendChild(tweetEl);
   });
 };
-
-const searchBar = document.getElementById("searchBar");
-searchBar.addEventListener("keyup", (e) => {
-  const searchString = e.target.value.toLowerCase();
-  console.log(searchString);
-  console.log(tweetData);
-  const filteredCharacters = tweetData.filter((tweet) => {
-    console.log;
-    return tweet.text.toLowerCase().includes(searchString);
-  });
-  console.log("hola--->", filteredCharacters);
-  displayTweets(filteredCharacters);
-});
 
 displayTweets();
