@@ -93,6 +93,7 @@ io.on("connection", async (clientSocket) => {
     console.error(error);
     process.exit(1);
   }
+
   clientSocket.on("changeFilter", async ({ value }) => {
     let currentRules;
     console.log("CHANGING RULES", value);
@@ -100,13 +101,15 @@ io.on("connection", async (clientSocket) => {
     await deleteRules(currentRules);
 
     connections.set(clientSocket, rules);
-    console.log("HERE", connections);
+    //console.log("HERE", connections);
     let mapRules = [];
     for (let [key, value] of connections) {
+      console.log("HHHHHHHHHHHH====>", value);
       mapRules.push(value);
-      console.log(connections);
     }
-    rules = mapRules;
+    console.log("CHANGING RULES", mapRules);
+    rules = [...mapRules];
+    console.log("-------->>>>>", rules);
     await setRules();
   });
 
