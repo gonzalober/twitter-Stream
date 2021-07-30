@@ -11,15 +11,12 @@ const config = require("dotenv").config();
 const TOKEN = process.env.TWITTER_TOKEN;
 
 app.use(express.static("client"));
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../", "client", "index.html"));
-});
 
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
   "https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
 
-const rules = [{ value: "Argentina" }]; //[{ value: "Argentina" }];
+let rules = [];
 
 //get stream rules
 const getRules = async () => {
@@ -81,7 +78,8 @@ const streamTweets = (socket) => {
 };
 
 //run when client connects
-io.on("connection", async () => {
+const connections = new Map();
+io.on("connection", async (clientSocket) => {
   console.log("Client connected...");
   let currentRules;
   try {
@@ -95,6 +93,23 @@ io.on("connection", async () => {
     console.error(error);
     process.exit(1);
   }
+  clientSocket.on("changeFilter", async ({ value }) => {
+    let currentRules;
+    console.log("CHANGING RULES", value);
+    currentRules = await getRules();
+    await deleteRules(currentRules);
+
+    connections.set(clientSocket, rules);
+    console.log("HERE", connections);
+    let mapRules = [];
+    for (let [key, value] of connections) {
+      mapRules.push(value);
+      console.log(connections);
+    }
+    rules = mapRules;
+    await setRules();
+  });
+
   streamTweets(io);
 });
 
