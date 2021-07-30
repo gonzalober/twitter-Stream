@@ -16,7 +16,7 @@ const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
   "https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
 
-let rules = [];
+let rules = [{ value: "argentina" }];
 
 //get stream rules
 const getRules = async () => {
@@ -29,7 +29,8 @@ const getRules = async () => {
 };
 
 //set stream rules
-const setRules = async () => {
+const addRules = async () => {
+  //const rules = rules.data.map((rule) => rule.id);
   const data = {
     add: rules,
   };
@@ -88,7 +89,7 @@ io.on("connection", async (clientSocket) => {
     //delete strem rules
     await deleteRules(currentRules);
     // //set stream rules
-    await setRules();
+    await addRules();
   } catch (error) {
     console.error(error);
     process.exit(1);
@@ -97,9 +98,9 @@ io.on("connection", async (clientSocket) => {
   clientSocket.on("changeFilter", async ({ value }) => {
     let currentRules;
     console.log("CHANGING RULES", value);
+
     currentRules = await getRules();
     await deleteRules(currentRules);
-
     connections.set(clientSocket, rules);
     //console.log("HERE", connections);
     let mapRules = [];
@@ -108,9 +109,9 @@ io.on("connection", async (clientSocket) => {
       mapRules.push(value);
     }
     console.log("CHANGING RULES", mapRules);
-    rules = [...mapRules];
+    rules = mapRules;
     console.log("-------->>>>>", rules);
-    await setRules();
+    await addRules();
   });
 
   streamTweets(io);
