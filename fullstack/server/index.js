@@ -25,11 +25,15 @@ const getRules = async () => {
       Authorization: `Bearer ${TOKEN}`,
     },
   });
+  if (response.statusCode !== 200) {
+    throw new Error(response.body);
+  }
   return response.body;
 };
 
 //set stream rules
 const addRules = async () => {
+  //let rules = [{ value: inputstr }];
   //const rules = rules.data.map((rule) => rule.id);
   const data = {
     add: rules,
@@ -40,6 +44,10 @@ const addRules = async () => {
       Authorization: `Bearer ${TOKEN}`,
     },
   });
+  // if (response.statusCode !== 201) {
+  //   throw new Error(response.body);
+  // }
+  console.log("ACA===>", data.add.value);
   return response.body;
 };
 
@@ -60,6 +68,11 @@ const deleteRules = async (rules) => {
       Authorization: `Bearer ${TOKEN}`,
     },
   });
+
+  if (response.statusCode !== 200) {
+    throw new Error(response.body);
+  }
+
   return response.body;
 };
 
@@ -97,21 +110,28 @@ io.on("connection", async (clientSocket) => {
 
   clientSocket.on("changeFilter", async ({ value }) => {
     let currentRules;
-    console.log("CHANGING RULES", value);
-
-    currentRules = await getRules();
-    await deleteRules(currentRules);
-    connections.set(clientSocket, rules);
-    //console.log("HERE", connections);
-    let mapRules = [];
-    for (let [key, value] of connections) {
-      console.log("HHHHHHHHHHHH====>", value);
-      mapRules.push(value);
+    try {
+      console.log("CHANGING RULES", value);
+      currentRules = await getRules();
+      console.log("CURRENT RULES", currentRules);
+      await deleteRules(currentRules);
+      console.log("DELETED RULES", currentRules);
+      // connections.set(clientSocket, rules);
+      // //console.log("HERE", connections);
+      // let mapRules = [];
+      // for (let [key, value] of connections) {
+      //   console.log("HHHHHHHHHHHH====>", value);
+      //   mapRules.push(value);
+      // }
+      // console.log("CHANGING RULES", mapRules);
+      // rules = mapRules;
+      // console.log("-------->>>>>", rules);
+      await addRules(currentRules);
+      console.log("ADDED RULES", currentRules);
+    } catch (error) {
+      console.error(error);
+      process.exit(1);
     }
-    console.log("CHANGING RULES", mapRules);
-    rules = mapRules;
-    console.log("-------->>>>>", rules);
-    await addRules();
   });
 
   streamTweets(io);

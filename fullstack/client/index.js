@@ -19,7 +19,7 @@ const onKeyup = window.debounce((e) => {
   socket.emit("changeFilter", {
     value: searchString,
   });
-}, 300);
+}, 400);
 
 searchBar.addEventListener("keyup", onKeyup);
 
